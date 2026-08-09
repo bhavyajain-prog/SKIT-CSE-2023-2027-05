@@ -75,7 +75,7 @@ def get_repo_info():
     return repo_name, branch_name
 
 
-def get_git_metrics(interval="weekly"):
+def get_git_metrics(interval="weekly", as_of_date=None):
     """
     Parses Git commit logs.
 
@@ -85,7 +85,7 @@ def get_git_metrics(interval="weekly"):
     - final
     """
 
-    today = datetime.date.today()
+    today = as_of_date if as_of_date else datetime.date.today()
 
     git_args = [
         "git",
@@ -97,24 +97,18 @@ def get_git_metrics(interval="weekly"):
     ]
 
     if interval == "weekly":
-        since_date = (
-            today - datetime.timedelta(days=7)
-        ).strftime("%Y-%m-%d")
-
-        git_args.append(f"--since={since_date}")
-
-        scope_title = f"Last 7 Days (Since {since_date})"
+        since_dt = today - datetime.timedelta(days=6)
+        until_dt = today
+        scope_title = f"{since_dt.strftime('%d %b %Y')} to {until_dt.strftime('%d %b %Y')}"
 
     elif interval == "monthly":
-        since_date = (
-            today - datetime.timedelta(days=30)
-        ).strftime("%Y-%m-%d")
-
-        git_args.append(f"--since={since_date}")
-
-        scope_title = f"Last 30 Days (Since {since_date})"
+        since_dt = today - datetime.timedelta(days=29)
+        until_dt = today
+        scope_title = f"{since_dt.strftime('%d %b %Y')} to {until_dt.strftime('%d %b %Y')}"
 
     else:
+        since_dt = None
+        until_dt = as_of_date if as_of_date else None
         scope_title = "Complete Project Lifecycle (All Commits)"
 
     try:
@@ -171,6 +165,30 @@ def get_git_metrics(interval="weekly"):
             ):
                 current_author = None
                 continue
+
+            # --- DATE FILTERING ---
+            try:
+                commit_dt = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+                if since_dt and commit_dt < since_dt:
+                    current_author = None
+                    continue
+                if until_dt and commit_dt > until_dt:
+                    current_author = None
+                    continue
+            except Exception:
+                current_author = None
+                continue
+
+            # --- NORMALIZE AUTHOR NAME ---
+            author_lower = author.lower()
+            if "bhavishya" in author_lower:
+                author = "Bhavishya Raghav"
+            elif "aaditya" in author_lower:
+                author = "Aaditya Jain"
+            elif "bhavya" in author_lower:
+                author = "Bhavya Jain"
+            elif "aman" in author_lower:
+                author = "Aman Sharma"
 
             # -----------------------------
 
@@ -346,7 +364,7 @@ def create_charts(students, timeline_activity, interval):
     )
 
 
-def generate_pdf(interval="weekly"):
+def generate_pdf(interval="weekly", as_of_date=None):
     repo_name, branch_name = get_repo_info()
 
     (
@@ -354,12 +372,13 @@ def generate_pdf(interval="weekly"):
         timeline_activity,
         student_logs,
         scope_title,
-    ) = get_git_metrics(interval)
+    ) = get_git_metrics(interval, as_of_date)
 
     if students is None:
         return
 
-    date_stamp = datetime.date.today().strftime("%Y-%m-%d")
+    target_date = as_of_date if as_of_date else datetime.date.today()
+    date_stamp = target_date.strftime("%Y-%m-%d")
 
     if interval == "weekly":
         report_title = "Weekly Progress Report (Form-3)"
@@ -547,7 +566,7 @@ def generate_pdf(interval="weekly"):
             f"<b>Evaluation Window:</b> {scope_title} "
             f"&nbsp;|&nbsp; "
             f"<b>Generated On:</b> "
-            f"{datetime.date.today().strftime('%B %d, %Y')}",
+            f"{target_date.strftime('%B %d, %Y')}",
             meta_style,
         )
     )
@@ -1010,6 +1029,13 @@ def generate_pdf(interval="weekly"):
 
     doc.build(story)
 
+    if interval == "weekly":
+        import shutil
+        os.makedirs("weekly_reports", exist_ok=True)
+        dest_path = os.path.join("weekly_reports", doc_name)
+        if os.path.abspath(doc_name) != os.path.abspath(dest_path):
+            shutil.copyfile(doc_name, dest_path)
+
     print(
         f"\n[SUCCESS] Generated: {doc_name}"
     )
@@ -1031,4 +1057,10 @@ if __name__ == "__main__":
         else "weekly"
     )
 
-    generate_pdf(chosen_interval)
+    as_of = None
+    if len(sys.argv) > 2:
+        as_of = datetime.datetime.strptime(
+            sys.argv[2], "%Y-%m-%d"
+        ).date()
+
+    generate_pdf(chosen_interval, as_of)
