@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Table(name = "batches")
 public class BatchEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;

@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Builder
 @Data
+@Entity
+@Table(name = "scheduled_sessions")
 public class ScheduledSessionEntity extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private SessionEntity session;
