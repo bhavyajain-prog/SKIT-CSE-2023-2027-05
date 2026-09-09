@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Builder
 @Data
+@Entity
+@Table(name = "rooms")
 public class RoomEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;

@@ -8,9 +8,10 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Builder
 @Data
+@Entity
+@Table(name = "teachers")
 public class TeacherEntity extends BaseEntity {
     @Column(nullable = false)
     private String firstName;
