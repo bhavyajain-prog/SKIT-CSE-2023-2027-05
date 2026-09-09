@@ -1,4 +1,4 @@
-package com.kronos.persistence.model;
+package com.kronos.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

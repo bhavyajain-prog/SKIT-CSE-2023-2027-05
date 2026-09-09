@@ -1,9 +1,11 @@
-package com.kronos.persistence.model;
+package com.kronos.persistence.entity;
 
 import com.kronos.enums.SubjectType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
