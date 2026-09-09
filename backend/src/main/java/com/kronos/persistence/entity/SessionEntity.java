@@ -1,6 +1,9 @@
-package com.kronos.persistence.model;
+package com.kronos.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
