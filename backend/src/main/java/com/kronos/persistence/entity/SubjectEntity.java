@@ -1,14 +1,18 @@
-package com.kronos.persistence.model;
+package com.kronos.persistence.entity;
 
 import com.kronos.enums.SubjectType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.*;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Builder
 @Data
+@Entity
+@Table(name = "subjects")
 public class SubjectEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String subjectCode;
