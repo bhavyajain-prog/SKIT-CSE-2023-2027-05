@@ -1,0 +1,95 @@
+/**
+ * Design System Tokens & Style Variables — KronosTT
+ * Track: UI + Data (Bhavishya Raghav)
+ * Date: September 2026
+ */
+
+:root {
+  /* Brand Color Tokens */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Neutral Slate Surface Tokens */
+  --color-surface-bg: #f8fafc;
+  --color-surface-card: #ffffff;
+  --color-surface-border: #e2e8f0;
+  --color-surface-hover: #f1f5f9;
+
+  /* Timetable Slot Category Colors */
+  --slot-lecture-bg: #eef2ff;
+  --slot-lecture-border: #818cf8;
+  --slot-lecture-text: #3730a3;
+
+  --slot-lab-bg: #ecfeff;
+  --slot-lab-border: #22d3ee;
+  --slot-lab-text: #155e75;
+
+  --slot-break-bg: #f1f5f9;
+  --slot-break-border: #cbd5e1;
+  --slot-break-text: #64748b;
+
+  --slot-conflict-bg: #fef2f2;
+  --slot-conflict-border: #f87171;
+  --slot-conflict-text: #991b1b;
+
+  /* Typography Scales */
+  --font-family-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Fira Code", monospace;
+
+  /* Elevation Shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-elevated: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-modal: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Border Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+/* Base Component Utility Classes */
+.timetable-slot {
+  border-radius: var(--radius-md);
+  padding: 0.625rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.timetable-slot:hover {
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-1px);
+}
+
+.timetable-slot--lecture {
+  background-color: var(--slot-lecture-bg);
+  border: 1px solid var(--slot-lecture-border);
+  color: var(--slot-lecture-text);
+}
+
+.timetable-slot--lab {
+  background-color: var(--slot-lab-bg);
+  border: 1px solid var(--slot-lab-border);
+  color: var(--slot-lab-text);
+}
+
+.timetable-slot--conflict {
+  background-color: var(--slot-conflict-bg);
+  border: 2px dashed var(--slot-conflict-border);
+  color: var(--slot-conflict-text);
+}
+
+.card-container {
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
