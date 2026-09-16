@@ -1,0 +1,39 @@
+#api-check {
+  margin: 2rem auto;
+  max-width: 32rem;
+  text-align: center;
+}
+
+.api-status {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.api-status__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+.api-status--ok {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.api-status--ok .api-status__dot {
+  background: #16a34a;
+}
+
+.api-status--error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.api-status--error .api-status__dot {
+  background: #dc2626;
+}
