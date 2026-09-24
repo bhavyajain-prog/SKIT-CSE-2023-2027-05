@@ -6,9 +6,17 @@ on:
     paths:
       - "backend/**"
 
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       postgres:
@@ -33,14 +41,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 25 (Temurin)
+      - name: Set up JDK 21 (Temurin)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "25"
+          java-version: "21"
           cache: maven
 
       - name: Build and test with Maven
-        run: ./mvnw -B verify
+        run: ./mvnw -B -ntp verify
         env:
           SPRING_PROFILES_ACTIVE: test
