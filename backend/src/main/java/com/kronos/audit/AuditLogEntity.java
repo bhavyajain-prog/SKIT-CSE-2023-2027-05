@@ -7,7 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+
 import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.Builder;
@@ -32,8 +32,7 @@ public class AuditLogEntity {
     @Column(nullable = false, length = 20)
     private AuditAction action;
 
-    @Lob
-    @Column(name = "snapshot")
+    @Column(name = "snapshot", columnDefinition = "TEXT")
     private String snapshot;
 
     @Column(name = "performed_by", nullable = false)
