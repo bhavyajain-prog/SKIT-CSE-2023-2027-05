@@ -1,8 +1,8 @@
 package com.kronos.service.mapper;
 
 import com.kronos.engine.model.Batch;
-import com.kronos.persistence.model.BatchEntity;
-import com.kronos.persistence.model.SubjectEntity;
+import com.kronos.persistence.entity.BatchEntity;
+import com.kronos.persistence.entity.SubjectEntity;
 import org.mapstruct.Mapping;
 
 import java.util.List;
