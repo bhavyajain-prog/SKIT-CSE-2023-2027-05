@@ -31,7 +31,7 @@ public class AuditLogEntity {
     @Column(nullable = false, length = 20)
     private AuditAction action;
 
-    @Column(name = "snapshot")
+    @Column(name = "snapshot", columnDefinition = "TEXT")
     private String snapshot;
 
     @Column(name = "performed_by", nullable = false)
