@@ -140,6 +140,8 @@
 
                 <configuration>
                     <release>${java.version}</release>
+                    <!-- Keep parameter names so @PathVariable / @RequestParam work without explicit names -->
+                    <parameters>true</parameters>
 
                     <annotationProcessorPaths>
 

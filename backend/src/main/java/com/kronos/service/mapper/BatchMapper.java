@@ -6,11 +6,12 @@ import com.kronos.persistence.entity.SubjectEntity;
 import com.kronos.web.dto.BatchDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(config = CentralMapperConfig.class)
 public interface BatchMapper {
 
     // 1. DB Entity <-> Engine POJO
@@ -33,6 +34,15 @@ public interface BatchMapper {
             qualifiedByName = "mapIdsToSubjects"
     )
     BatchEntity toEntity(BatchDto dto);
+
+    // 3b. Web DTO -> existing DB Entity (PUT)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(
+            target = "subjects",
+            source = "subjectIds",
+            qualifiedByName = "mapIdsToSubjects"
+    )
+    void updateEntity(BatchDto dto, @MappingTarget BatchEntity entity);
 
     // 4. Convert SubjectEntity list to subject ID list
     @Named("mapSubjectsToIds")
