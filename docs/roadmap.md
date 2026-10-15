@@ -37,6 +37,7 @@ Everything else in it (services, mappers, DTOs, controllers,
 - Generic `audit_log` via JPA entity listener on `BaseEntity`
 - Engine models + `Constraints` interface + `TimeTableState`
 - `BatchService`, `BatchMapper` (MapStruct) + `BatchDto`, `AbstractPlacementAlgo`
+- API error handling: `GlobalExceptionHandler` + `ApiError` (404 / 400 with field errors / 409 / 500), `ResourceNotFoundException`, `ConflictException`, shared `CentralMapperConfig`; `-parameters` compiler flag
 - Weekly Form-3 report automation
 
 **In progress**
@@ -169,10 +170,8 @@ references as `subjectIds: List<Long>`. For Room, it takes
 
 ### Blocking fixes (Bhavya, part of the service layer task)
 
-1. ⏳ **Entities need a no-arg constructor.** Only `SubjectEntity` has
-   `@NoArgsConstructor` so far. Add `@NoArgsConstructor` +
-   `@AllArgsConstructor` to every other `*Entity`; Hibernate needs a no-arg
-   constructor to load rows.
+1. ✅ Every `*Entity` has `@NoArgsConstructor` + `@AllArgsConstructor`, so
+   Hibernate can load rows.
 2. ✅ `BaseEntity` is public with `@Getter`, so ids are readable.
 3. ✅ `SubjectEntity.subjectType` uses `@Enumerated(EnumType.STRING)`, with
    a matching migration.

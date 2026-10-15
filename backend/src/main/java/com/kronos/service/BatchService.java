@@ -2,6 +2,7 @@ package com.kronos.service;
 
 import com.kronos.persistence.entity.BatchEntity;
 import com.kronos.persistence.repository.BatchRepository;
+import com.kronos.service.exception.ResourceNotFoundException;
 import com.kronos.service.mapper.BatchMapper;
 import com.kronos.web.dto.BatchDto;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class BatchService {
 
     public BatchDto getBatchById(Long id) {
         BatchEntity entity = batchRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Batch not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Batch", id));
         return batchMapper.toDto(entity);
     }
 
@@ -38,17 +39,18 @@ public class BatchService {
     @Transactional
     public BatchDto updateBatch(Long id, BatchDto dto) {
         BatchEntity existing = batchRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Batch not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Batch", id));
 
-        existing.setName(dto.getName());
-        existing.setStrength(dto.getStrength());
-        // Map any other fields here
+        batchMapper.updateEntity(dto, existing);
 
         return batchMapper.toDto(batchRepository.save(existing));
     }
 
     @Transactional
     public void deleteBatch(Long id) {
+        if (!batchRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Batch", id);
+        }
         batchRepository.deleteById(id);
     }
 
