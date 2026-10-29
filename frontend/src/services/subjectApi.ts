@@ -1,7 +1,7 @@
 import { env } from '../config/env';
-import { SubjectDto, PageResponse } from '../types/subject';
+import type { SubjectDto, PageResponse } from '../types/subject';
 
-const API_BASE_URL = `${env.apiBaseUrl}/api/v1/subjects`;
+const API_BASE_URL = `${env.apiBaseUrl}/v1/subjects`;
 
 export async function getAllSubjects(page = 0, size = 20): Promise<PageResponse<SubjectDto>> {
   const res = await fetch(`${API_BASE_URL}?page=${page}&size=${size}&sort=subjectCode,asc`);
