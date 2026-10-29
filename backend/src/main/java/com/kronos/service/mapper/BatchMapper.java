@@ -1,6 +1,7 @@
 package com.kronos.service.mapper;
 
 import com.kronos.engine.model.Batch;
+import com.kronos.engine.model.Subject;
 import com.kronos.persistence.entity.BatchEntity;
 import com.kronos.persistence.entity.SubjectEntity;
 import com.kronos.web.dto.BatchDto;
@@ -18,6 +19,10 @@ public interface BatchMapper {
     Batch toEngine(BatchEntity entity);
 
     BatchEntity toEntity(Batch pojo);
+
+    // 1b. Subject element of the engine Batch (field names differ)
+    @Mapping(target = "name", source = "subjectName")
+    Subject toEngine(SubjectEntity entity);
 
     // 2. DB Entity -> Web DTO
     @Mapping(
