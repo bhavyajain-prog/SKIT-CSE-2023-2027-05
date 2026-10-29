@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ScheduledSessionRepository extends JpaRepository<ScheduledSessionEntity, Long> {
-
-    boolean existsByRoomId(Long roomId);
 }
