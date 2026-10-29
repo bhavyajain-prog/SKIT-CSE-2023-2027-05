@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface SessionRepository extends JpaRepository<SessionEntity, Long> {
 
     boolean existsByPreferredRoomId(Long preferredRoomId);
+
+    boolean existsBySubjectId(Long subjectId);
 }
