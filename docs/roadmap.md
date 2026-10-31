@@ -55,8 +55,8 @@ Status: ✅ done · 🔄 in progress · ⏳ planned
 | Task | Start | End | Status |
 |---|---|---|---|
 | Automated build checks (GitHub CI/CD) | 2026-08-31 | 2026-09-13 | ✅ |
-| Dedicated service layer separated from engine | 2026-09-14 | 2026-10-18 | 🔄 |
-| JUnit testing | 2026-10-19 | 2026-11-08 | ⏳ |
+| Dedicated service layer separated from engine | 2026-09-14 | 2026-10-18 | ✅ |
+| JUnit testing | 2026-10-19 | 2026-11-08 | 🔄 |
 | Docker based build and deployment setup | 2026-11-09 | 2026-11-22 | ⏳ |
 | Engine integration with timetable service | 2026-11-23 | 2026-12-27 | ⏳ |
 | Performance and load testing | 2026-12-28 | 2027-01-31 | ⏳ |
