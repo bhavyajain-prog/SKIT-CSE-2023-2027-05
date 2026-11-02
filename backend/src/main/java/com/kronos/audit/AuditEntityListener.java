@@ -1,6 +1,5 @@
 package com.kronos.audit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostUpdate;
 import jakarta.persistence.PreRemove;
@@ -24,16 +23,9 @@ public class AuditEntityListener {
 
     private void record(Object entity, AuditAction action) {
         AuditLogService auditLogService = SpringContextHolder.getBean(AuditLogService.class);
-        auditLogService.record(entity.getClass().getSimpleName(), extractId(entity), action, serialize(entity));
-    }
-
-    private String serialize(Object entity) {
-        try {
-            ObjectMapper objectMapper = SpringContextHolder.getBean("auditObjectMapper", ObjectMapper.class);
-            return objectMapper.writeValueAsString(entity);
-        } catch (Exception e) {
-            return null;
-        }
+        AuditSnapshotSerializer serializer = SpringContextHolder.getBean(AuditSnapshotSerializer.class);
+        auditLogService.record(entity.getClass().getSimpleName(), extractId(entity), action,
+                serializer.serialize(entity));
     }
 
     private Long extractId(Object entity) {

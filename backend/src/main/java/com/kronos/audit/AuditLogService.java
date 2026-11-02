@@ -1,5 +1,6 @@
 package com.kronos.audit;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +21,8 @@ public class AuditLogService {
                 action.name(),
                 snapshot,
                 currentUser(),
-                Instant.now());
+                // The PostgreSQL driver cannot bind java.time.Instant directly.
+                Timestamp.from(Instant.now()));
     }
 
     private String currentUser() {
