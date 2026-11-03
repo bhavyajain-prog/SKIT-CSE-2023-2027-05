@@ -7,16 +7,19 @@ import com.kronos.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Creates one admin account so login can be tried locally. Only runs with the "dev" profile.
+ * Creates one admin account so login can be tried locally. Only runs with the "dev" profile,
+ * and after RbacSeeder (which creates the SUPER_ADMIN role).
  * The password comes from the DEV_ADMIN_PASSWORD environment variable (.env), never from code.
  */
 @Component
 @Profile("dev")
+@Order(2)
 public class DevUserSeeder implements CommandLineRunner {
 
     private final UserRepository users;
@@ -42,7 +45,7 @@ public class DevUserSeeder implements CommandLineRunner {
             return;
         }
         RoleEntity admin = roles.findByName("SUPER_ADMIN")
-                .orElseGet(() -> roles.save(new RoleEntity("SUPER_ADMIN")));
+                .orElseThrow(() -> new IllegalStateException("SUPER_ADMIN role missing, RbacSeeder did not run"));
         UserEntity user = new UserEntity();
         user.setEmail(email);
         user.setFullName("Dev Admin");
