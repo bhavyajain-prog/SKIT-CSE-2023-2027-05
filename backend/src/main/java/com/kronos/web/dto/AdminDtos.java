@@ -13,7 +13,6 @@ public final class AdminDtos {
     public record RoleView(String name, int level, List<String> permissions) {
     }
 
-    /** Never contains the password hash. */
     public record UserView(Long id, String email, String fullName, boolean enabled, List<String> roles) {
     }
 

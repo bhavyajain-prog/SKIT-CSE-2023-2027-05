@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Maps security exceptions thrown inside controllers/services to 401/403, and
- * BadRequestException to 400. Runs before GlobalExceptionHandler, whose catch-all
- * would otherwise turn all of them into 500s.
- */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class SecurityExceptionHandler {
