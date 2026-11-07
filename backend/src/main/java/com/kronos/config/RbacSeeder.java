@@ -25,6 +25,9 @@ public class RbacSeeder implements CommandLineRunner {
     public static final List<String> FACULTY_PERMISSIONS =
             List.of("FACULTY_READ", "SUBJECT_READ", "ROOM_READ", "TIMETABLE_READ");
 
+    public static final List<String> STUDENT_PERMISSIONS =
+            List.of("SUBJECT_READ", "ROOM_READ", "TIMETABLE_READ");
+
     public static final List<String> HOD_PERMISSIONS =
             concat(FACULTY_PERMISSIONS, List.of("TIMETABLE_GENERATE", "TIMETABLE_EXPORT"));
 
@@ -40,6 +43,7 @@ public class RbacSeeder implements CommandLineRunner {
 
     private static final List<RoleSpec> ROLES = List.of(
             new RoleSpec("FACULTY", 1, FACULTY_PERMISSIONS),
+            new RoleSpec("STUDENT", 1, STUDENT_PERMISSIONS),
             new RoleSpec("HOD", 2, HOD_PERMISSIONS),
             new RoleSpec("INSTITUTE_ADMIN", 3, INSTITUTE_ADMIN_PERMISSIONS),
             new RoleSpec("SUPER_ADMIN", 4, SUPER_ADMIN_PERMISSIONS));
