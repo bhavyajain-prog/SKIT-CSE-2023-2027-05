@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** A single thing a role may do, e.g. FACULTY_WRITE. Not audited, like the other auth tables. */
 @Getter
 @Setter
 @NoArgsConstructor

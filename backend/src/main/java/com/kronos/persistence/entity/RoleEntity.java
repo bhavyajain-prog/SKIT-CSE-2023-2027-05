@@ -17,10 +17,6 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Auth role (e.g. SUPER_ADMIN). Deliberately does not extend BaseEntity so
- * auth tables are not written to audit_log.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,7 +31,6 @@ public class RoleEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    /** Higher number = more powerful (SUPER_ADMIN 4, INSTITUTE_ADMIN 3, HOD 2, FACULTY 1). */
     @Column(nullable = false)
     private int level;
 
