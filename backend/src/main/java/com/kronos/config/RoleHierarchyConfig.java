@@ -19,6 +19,7 @@ public class RoleHierarchyConfig {
                 ROLE_SUPER_ADMIN > ROLE_INSTITUTE_ADMIN
                 ROLE_INSTITUTE_ADMIN > ROLE_HOD
                 ROLE_HOD > ROLE_FACULTY
+                ROLE_HOD > ROLE_STUDENT
                 """);
     }
 }
