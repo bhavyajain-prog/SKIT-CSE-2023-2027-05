@@ -13,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Loads a login account by email. Each role becomes a ROLE_<NAME> authority and each
- * permission of that role becomes an authority of its own (e.g. FACULTY_WRITE).
- */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
