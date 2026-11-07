@@ -27,10 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Logs in with real users and calls the admin API with their tokens. Roles and permissions
- * come from RbacSeeder (it runs at startup). Rolled back after every test.
- */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional

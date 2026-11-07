@@ -19,7 +19,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Runs in a transaction that is rolled back, so backend_test stays clean. */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
