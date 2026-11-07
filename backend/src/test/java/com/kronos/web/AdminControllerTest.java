@@ -161,6 +161,22 @@ class AdminControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void instituteAdminCanGiveStudentRole() throws Exception {
+        UserEntity user = createUser("s@kronos.test", "FACULTY");
+        createUser("ia@kronos.test", "INSTITUTE_ADMIN");
+        putJson("/api/admin/users/" + user.getId() + "/roles", "ia@kronos.test", "{\"roles\":[\"STUDENT\"]}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles[0]").value("STUDENT"));
+    }
+
+    @Test
+    void studentCannotListRoles() throws Exception {
+        createUser("st@kronos.test", "STUDENT");
+        mockMvc.perform(get("/api/admin/roles").header("Authorization", bearer("st@kronos.test")))
+                .andExpect(status().isForbidden());
+    }
+
     private UserEntity createUser(String email, String roleName) {
         UserEntity user = new UserEntity();
         user.setEmail(email);
