@@ -5,11 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 
-/**
- * A higher role automatically has everything a lower role has in hasRole(...) checks.
- * Note: this only expands ROLE_* authorities, not permissions. RbacSeeder therefore gives
- * every higher role the permissions of the roles below it.
- */
 @Configuration
 public class RoleHierarchyConfig {
 

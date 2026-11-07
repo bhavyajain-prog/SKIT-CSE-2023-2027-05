@@ -12,11 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Creates one admin account so login can be tried locally. Only runs with the "dev" profile,
- * and after RbacSeeder (which creates the SUPER_ADMIN role).
- * The password comes from the DEV_ADMIN_PASSWORD environment variable (.env), never from code.
- */
 @Component
 @Profile("dev")
 @Order(2)

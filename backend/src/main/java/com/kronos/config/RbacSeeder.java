@@ -12,16 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * Makes sure the standard roles and permissions exist. Safe to run on every start:
- * existing rows are reused, and a role that already has permissions keeps them
- * (an admin may have customised them). Creates no users.
- */
 @Component
 @Order(1)
 public class RbacSeeder implements CommandLineRunner {
 
-    // Never start a permission name with "ROLE_": Spring Security treats that prefix as a role.
     public static final List<String> FACULTY_PERMISSIONS =
             List.of("FACULTY_READ", "SUBJECT_READ", "ROOM_READ", "TIMETABLE_READ");
 
