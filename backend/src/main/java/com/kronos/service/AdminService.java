@@ -48,10 +48,6 @@ public class AdminService {
         return users.findAll().stream().map(this::toView).toList();
     }
 
-    /**
-     * Replaces a user's roles. Rules: you cannot change your own roles, cannot touch a user
-     * who outranks you, and cannot hand out a role higher than your own.
-     */
     @Transactional
     public UserView assignRoles(Long userId, Set<String> roleNames, String callerEmail) {
         UserEntity caller = users.findByEmail(callerEmail)
@@ -80,7 +76,6 @@ public class AdminService {
         return toView(users.save(target));
     }
 
-    /** Replaces the permissions of a role. SUPER_ADMIN is fixed so nobody can lock everyone out. */
     @Transactional
     public RoleView setPermissions(String roleName, Set<String> permissionNames) {
         RoleEntity role = roles.findByName(roleName)
