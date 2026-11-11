@@ -1,5 +1,6 @@
 package com.kronos.web.error;
 
+import com.kronos.service.exception.BadRequestException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.Ordered;
@@ -14,10 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Maps security exceptions thrown inside controllers/services to 401/403. Runs before
- * GlobalExceptionHandler, whose catch-all would otherwise turn them into 500s.
- */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class SecurityExceptionHandler {
@@ -30,6 +27,11 @@ public class SecurityExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleForbidden(AccessDeniedException ex, HttpServletRequest req) {
         return build(HttpStatus.FORBIDDEN, "You do not have permission to access this resource", req);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex, HttpServletRequest req) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req);
     }
 
     private ResponseEntity<ApiError> build(HttpStatus status, String message, HttpServletRequest req) {
