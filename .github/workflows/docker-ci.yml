@@ -29,3 +29,4 @@ jobs:
         run: docker compose build
         env:
           POSTGRES_PASSWORD: ci-only
+          JWT_SECRET: ci-only
