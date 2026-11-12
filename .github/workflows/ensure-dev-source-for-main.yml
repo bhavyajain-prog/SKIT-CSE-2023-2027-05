@@ -1,0 +1,35 @@
+name: Enforce dev as source for main
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-source-branch:
+    name: Validate PR source branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ensure PR comes from dev
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          if [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" != "dev" ]]; then
+            echo "Error: Pull requests into main must come from dev."
+            echo "Source branch: $HEAD_BRANCH"
+            echo "Target branch: $BASE_BRANCH"
+            exit 1
+          fi
+
+          echo "Source branch validation passed."
