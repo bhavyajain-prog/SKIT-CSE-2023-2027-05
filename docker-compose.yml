@@ -4,13 +4,13 @@
 
 services:
   db:
-    image: postgres:18
+    image: postgres:17
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-kronos}
       POSTGRES_USER: ${POSTGRES_USER:-kronos}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
     volumes:
-      - db-data:/var/lib/postgresql
+      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
