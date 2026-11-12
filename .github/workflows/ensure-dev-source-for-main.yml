@@ -20,16 +20,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Ensure PR comes from dev
+      - name: Ensure PR comes from dev or a report branch
         env:
           HEAD_BRANCH: ${{ github.head_ref }}
           BASE_BRANCH: ${{ github.base_ref }}
         run: |
-          if [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" != "dev" ]]; then
-            echo "Error: Pull requests into main must come from dev."
-            echo "Source branch: $HEAD_BRANCH"
-            echo "Target branch: $BASE_BRANCH"
-            exit 1
-          fi
-
-          echo "Source branch validation passed."
+          # Allowed sources for main: dev, the scheduled weekly report branch,
+          # and reports/* branches used to regenerate a past report.
+          case "$HEAD_BRANCH" in
+            dev|automation/weekly-progress-report|reports/*)
+              echo "Source branch validation passed: $HEAD_BRANCH"
+              ;;
+            *)
+              echo "Error: Pull requests into main must come from dev, automation/weekly-progress-report or reports/*."
+              echo "Source branch: $HEAD_BRANCH"
+              echo "Target branch: $BASE_BRANCH"
+              exit 1
+              ;;
+          esac
