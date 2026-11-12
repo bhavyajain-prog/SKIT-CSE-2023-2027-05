@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths:
       - "backend/**"
+  # Render deploys main only after this check passes (render.yaml: autoDeployTrigger).
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
 
 concurrency:
   group: backend-ci-${{ github.ref }}

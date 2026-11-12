@@ -1,0 +1,46 @@
+# Render Blueprint: the Spring Boot backend as a Docker web service.
+# Frontend is on Vercel (frontend/vercel.json), database is Supabase Postgres.
+# Set up once with: Render dashboard > New > Blueprint > pick this repo.
+services:
+  - type: web
+    name: kronostt-api
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /api/health
+    # DNS: CNAME api-kronos -> kronostt-api.onrender.com
+    domains:
+      - api-kronos.nerfex.dev
+    # Deploy only after GitHub checks (Backend CI) pass on main.
+    autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - backend/**
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      # Free instances have 512 MB; keep the JVM heap inside it.
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:MaxRAMPercentage=70 -XX:+UseSerialGC -Xss512k
+      # Supabase session pooler (IPv4; supports prepared statements + Flyway), e.g.
+      # jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require
+      - key: DB_URL
+        sync: false
+      # Pooler username has the form postgres.<project-ref>
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Base64, at least 256 bits (JwtService decodes it as base64).
+      - key: JWT_SECRET
+        generateValue: true
+      # First SUPER_ADMIN, created on startup only if no user has this email yet.
+      # Later admins are created or promoted in the app (/api/admin/users).
+      - key: BOOTSTRAP_ADMIN_EMAIL
+        sync: false
+      # At least 12 characters; ignored once the admin exists.
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        sync: false
