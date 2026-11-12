@@ -1,0 +1,40 @@
+name: Enforce dev as source for main
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-source-branch:
+    name: Validate PR source branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ensure PR comes from dev or a report branch
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          # Allowed sources for main: dev, the scheduled weekly report branch,
+          # and reports/* branches used to regenerate a past report.
+          case "$HEAD_BRANCH" in
+            dev|automation/weekly-progress-report|reports/*)
+              echo "Source branch validation passed: $HEAD_BRANCH"
+              ;;
+            *)
+              echo "Error: Pull requests into main must come from dev, automation/weekly-progress-report or reports/*."
+              echo "Source branch: $HEAD_BRANCH"
+              echo "Target branch: $BASE_BRANCH"
+              exit 1
+              ;;
+          esac
