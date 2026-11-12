@@ -14,7 +14,7 @@
     <description>Spring Boot backend for SKIT-CSE-2023-2027-05</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <spring-boot.version>3.5.5</spring-boot.version>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
         <mapstruct.version>1.6.3</mapstruct.version>
@@ -130,6 +130,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <!-- No starter parent, so bind repackage explicitly to get an executable jar -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Maven Compiler -->
