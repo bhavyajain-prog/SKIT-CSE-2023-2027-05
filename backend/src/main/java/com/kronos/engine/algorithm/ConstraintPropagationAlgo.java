@@ -5,7 +5,7 @@ import com.kronos.engine.model.Room;
 import com.kronos.engine.model.ScheduledSession;
 import com.kronos.engine.model.Session;
 import com.kronos.enums.WeekDay;
-import org.hibernate.mapping.Constraint;
+import com.kronos.engine.constraints.Constraints;
 
 import java.util.*;
 
@@ -16,12 +16,12 @@ public class ConstraintPropagationAlgo extends AbstractPlacementAlgo{
     private final int weekDays;
     private final int maxSlots;
     private final int lunchStart;
-    private final List<Constraint> constraints;
+    private final List<Constraints> constraints;
     // Track placed sessions for conflict detection
     private final List<PlacedSession> placedSessions = new ArrayList<>();
     private final Set<Long> placedSessionIds = new HashSet<>();
 
-    public ConstraintPropagationAlgo(List<Session> sessions, List<ScheduledSession> lockedSessions, List<Room> rooms, int weekDays, int maxSlots, int lunchStart, List<Constraint> constraints) {
+    public ConstraintPropagationAlgo(List<Session> sessions, List<ScheduledSession> lockedSessions, List<Room> rooms, int weekDays, int maxSlots, int lunchStart, List<Constraints> constraints) {
 
         super(sessions, lockedSessions != null ? lockedSessions : new ArrayList<>());
 

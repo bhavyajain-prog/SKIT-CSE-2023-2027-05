@@ -5,7 +5,6 @@ import com.kronos.engine.model.Session;
 import lombok.Data;
 import lombok.Getter;
 import com.kronos.engine.constraints.Constraints;
-import org.hibernate.mapping.Constraint;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ private Session[][] getEmptyGrid() {
     return new Session[workDays][maxSlots];
 }
 
-public int getHeuristicScore(Session session, Room room, int day, int start, List<Constraint> constraints) {
+public int getHeuristicScore(Session session, Room room, int day, int start, List<Constraints> constraints) {
     // 3. Collision = -INF (Check this first to save CPU cycles!)
     if (!canPlace(session, room, day, start)) {
         return -(Integer.MAX_VALUE / 2);
