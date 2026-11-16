@@ -9,9 +9,11 @@ import com.kronos.persistence.repository.UserRepository;
 import com.kronos.service.exception.BadRequestException;
 import com.kronos.service.exception.ConflictException;
 import com.kronos.service.exception.ResourceNotFoundException;
+import com.kronos.web.dto.AdminDtos.CreateUserRequest;
 import com.kronos.web.dto.AdminDtos.RoleView;
 import com.kronos.web.dto.AdminDtos.UserView;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +30,14 @@ public class AdminService {
     private final RoleRepository roles;
     private final PermissionRepository permissions;
     private final UserRepository users;
+    private final PasswordEncoder encoder;
 
-    public AdminService(RoleRepository roles, PermissionRepository permissions, UserRepository users) {
+    public AdminService(RoleRepository roles, PermissionRepository permissions, UserRepository users,
+                        PasswordEncoder encoder) {
         this.roles = roles;
         this.permissions = permissions;
         this.users = users;
+        this.encoder = encoder;
     }
 
     @Transactional(readOnly = true)
@@ -63,17 +68,34 @@ public class AdminService {
             throw new AccessDeniedException("Cannot modify a user with a higher role");
         }
 
-        Set<RoleEntity> newRoles = roleNames.stream()
-                .map(name -> roles.findByName(name)
-                        .orElseThrow(() -> new BadRequestException("Unknown role: " + name)))
-                .collect(Collectors.toSet());
-        if (newRoles.stream().anyMatch(role -> role.getLevel() > callerLevel)) {
-            throw new AccessDeniedException("Cannot assign a role higher than your own");
-        }
+        Set<RoleEntity> newRoles = grantableRoles(roleNames, callerLevel);
 
         target.getRoles().clear();
         target.getRoles().addAll(newRoles);
         return toView(users.save(target));
+    }
+
+    /**
+     * Creates a user with the given roles. Like role assignment, the caller can only
+     * grant roles up to their own level, so a SUPER_ADMIN can add further SUPER_ADMINs.
+     */
+    @Transactional
+    public UserView createUser(CreateUserRequest request, String callerEmail) {
+        UserEntity caller = users.findByEmail(callerEmail)
+                .orElseThrow(() -> new AccessDeniedException("Caller not found"));
+        Set<RoleEntity> newRoles = grantableRoles(request.roles(), maxLevel(caller));
+
+        String email = request.email().trim();
+        if (users.existsByEmailIgnoreCase(email)) {
+            throw new ConflictException("A user with email " + email + " already exists");
+        }
+
+        UserEntity user = new UserEntity();
+        user.setEmail(email);
+        user.setFullName(request.fullName());
+        user.setPassword(encoder.encode(request.password()));
+        user.getRoles().addAll(newRoles);
+        return toView(users.save(user));
     }
 
     @Transactional
@@ -92,6 +114,17 @@ public class AdminService {
         role.getPermissions().clear();
         role.getPermissions().addAll(newPermissions);
         return toView(roles.save(role));
+    }
+
+    private Set<RoleEntity> grantableRoles(Set<String> roleNames, int callerLevel) {
+        Set<RoleEntity> resolved = roleNames.stream()
+                .map(name -> roles.findByName(name)
+                        .orElseThrow(() -> new BadRequestException("Unknown role: " + name)))
+                .collect(Collectors.toSet());
+        if (resolved.stream().anyMatch(role -> role.getLevel() > callerLevel)) {
+            throw new AccessDeniedException("Cannot assign a role higher than your own");
+        }
+        return resolved;
     }
 
     private int maxLevel(UserEntity user) {

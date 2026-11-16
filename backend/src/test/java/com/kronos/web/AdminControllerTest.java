@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -173,6 +174,63 @@ class AdminControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    void superAdminCanCreateAnotherSuperAdmin() throws Exception {
+        createUser("sa@kronos.test", "SUPER_ADMIN");
+        postJson("/api/admin/users", "sa@kronos.test", newUser("sa2@kronos.test", "SUPER_ADMIN"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email").value("sa2@kronos.test"))
+                .andExpect(jsonPath("$.roles[0]").value("SUPER_ADMIN"))
+                .andExpect(jsonPath("$.password").doesNotExist());
+        bearer("sa2@kronos.test");
+    }
+
+    @Test
+    void instituteAdminCanCreateAnotherInstituteAdmin() throws Exception {
+        createUser("ia@kronos.test", "INSTITUTE_ADMIN");
+        postJson("/api/admin/users", "ia@kronos.test", newUser("ia2@kronos.test", "INSTITUTE_ADMIN"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void instituteAdminCannotCreateASuperAdmin() throws Exception {
+        createUser("ia@kronos.test", "INSTITUTE_ADMIN");
+        postJson("/api/admin/users", "ia@kronos.test", newUser("x@kronos.test", "SUPER_ADMIN"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void hodCannotCreateUsers() throws Exception {
+        createUser("hod@kronos.test", "HOD");
+        postJson("/api/admin/users", "hod@kronos.test", newUser("x@kronos.test", "FACULTY"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void duplicateEmailInAnyCaseReturns409() throws Exception {
+        createUser("sa@kronos.test", "SUPER_ADMIN");
+        createUser("f@kronos.test", "FACULTY");
+        postJson("/api/admin/users", "sa@kronos.test", newUser("F@Kronos.test", "FACULTY"))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shortPasswordReturns400() throws Exception {
+        createUser("sa@kronos.test", "SUPER_ADMIN");
+        postJson("/api/admin/users", "sa@kronos.test",
+                "{\"email\":\"x@kronos.test\",\"password\":\"short\",\"roles\":[\"FACULTY\"]}")
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void superAdminCanPromoteAnotherUserToSuperAdmin() throws Exception {
+        UserEntity ia = createUser("ia@kronos.test", "INSTITUTE_ADMIN");
+        createUser("sa@kronos.test", "SUPER_ADMIN");
+        putJson("/api/admin/users/" + ia.getId() + "/roles", "sa@kronos.test", "{\"roles\":[\"SUPER_ADMIN\"]}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles[0]").value("SUPER_ADMIN"));
+    }
+
     private UserEntity createUser(String email, String roleName) {
         UserEntity user = new UserEntity();
         user.setEmail(email);
@@ -191,6 +249,18 @@ class AdminControllerTest {
 
     private ResultActions putJson(String url, String email, String body) throws Exception {
         return mockMvc.perform(put(url)
+                .header("Authorization", bearer(email))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+    }
+
+    private String newUser(String email, String role) throws Exception {
+        return json.writeValueAsString(Map.of("email", email, "password", PASSWORD,
+                "fullName", "New User", "roles", List.of(role)));
+    }
+
+    private ResultActions postJson(String url, String email, String body) throws Exception {
+        return mockMvc.perform(post(url)
                 .header("Authorization", bearer(email))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));

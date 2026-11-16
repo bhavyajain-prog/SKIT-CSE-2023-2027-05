@@ -18,4 +18,3 @@ frontend/.vite/
 .env.*
 !*.env.example
 
-weekly_reports/
