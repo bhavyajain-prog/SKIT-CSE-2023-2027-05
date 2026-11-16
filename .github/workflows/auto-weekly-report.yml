@@ -20,6 +20,7 @@ jobs:
       - name: Checkout Repository with Full Git History
         uses: actions/checkout@v4
         with:
+          ref: dev
           fetch-depth: 0
 
       - name: Set up Python
@@ -45,6 +46,8 @@ jobs:
           branch: automation/weekly-progress-report
           base: main
           delete-branch: true
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: "docs: archive Form-3 weekly progress report"
           commit-message: "docs: archive Form-3 weekly progress report"
           body: |
