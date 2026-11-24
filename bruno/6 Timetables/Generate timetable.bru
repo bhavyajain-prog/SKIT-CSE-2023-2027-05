@@ -1,0 +1,49 @@
+meta {
+  name: Generate timetable
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/timetables/generate
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Odd semester draft",
+    "weekDays": 5,
+    "maxSlots": 8,
+    "lunchStart": 4
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setVar("timetableId", res.body.summary.id);
+  }
+}
+
+tests {
+  test("returns 201 with the placed sessions", function () {
+    expect(res.status).to.equal(201);
+    expect(res.body.summary.id).to.be.a("number");
+    expect(res.body.scheduled).to.be.an("array");
+    expect(res.body.unscheduled).to.be.an("array");
+  });
+
+  test("no session spans the lunch slot", function () {
+    const lunch = 4;
+    res.body.scheduled.forEach(function (slot) {
+      const end = slot.startSlot + slot.slotDuration - 1;
+      expect(slot.startSlot <= lunch && end >= lunch).to.equal(false);
+    });
+  });
+}
+
+docs {
+  Days run from 0 (Monday); slots are numbered from 0. `lunchStart` is the slot
+  no session may span; leave it out for no lunch break. Sessions the engine
+  could not place come back under `unscheduled` with no day, slot or room.
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Demo user lists users (403)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/admin/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{demoAccessToken}}
+}
+
+tests {
+  test("FACULTY role lacks USER_MANAGE", function () {
+    expect(res.status).to.equal(403);
+  });
+}

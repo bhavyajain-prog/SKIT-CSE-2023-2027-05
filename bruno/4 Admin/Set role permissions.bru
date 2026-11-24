@@ -1,0 +1,36 @@
+meta {
+  name: Set role permissions
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/admin/roles/HOD/permissions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "permissions": [
+      "FACULTY_READ",
+      "SUBJECT_READ",
+      "ROOM_READ",
+      "TIMETABLE_READ",
+      "TIMETABLE_GENERATE",
+      "TIMETABLE_EXPORT"
+    ]
+  }
+}
+
+tests {
+  test("returns the role", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.name).to.equal("HOD");
+  });
+}
+
+docs {
+  **Replaces** the role's whole permission set. The sample body is HOD's
+  seeded default, so running it unchanged is a no-op. Needs PERMISSION_MANAGE.
+}

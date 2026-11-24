@@ -1,0 +1,17 @@
+meta {
+  name: Delete faculty
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/api/faculty/{{facultyId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("returns 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}

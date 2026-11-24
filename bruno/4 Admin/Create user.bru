@@ -1,0 +1,44 @@
+meta {
+  name: Create user
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/admin/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "{{demoUserEmail}}",
+    "password": "{{demoUserPassword}}",
+    "fullName": "Demo Faculty User",
+    "roles": ["FACULTY"]
+  }
+}
+
+script:pre-request {
+  // Fresh user each run; the password is kept as a runtime variable for "5 RBAC demo".
+  const stamp = Date.now();
+  bru.setVar("demoUserEmail", `demo.user.${stamp}@kronos.test`);
+  bru.setVar("demoUserPassword", `Demo-pass-${stamp}`);
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setVar("userId", res.body.id);
+  }
+}
+
+tests {
+  test("returns 201 with FACULTY role", function () {
+    expect(res.status).to.equal(201);
+    expect(res.body.roles).to.include("FACULTY");
+  });
+}
+
+docs {
+  Password must be 12-128 characters. Roles: FACULTY, STUDENT, HOD, INSTITUTE_ADMIN, SUPER_ADMIN.
+}

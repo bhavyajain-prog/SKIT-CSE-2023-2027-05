@@ -1,0 +1,42 @@
+meta {
+  name: Create faculty
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/faculty
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "Priya 2",
+    "lastName": "Sharma",
+    "email": "{{facultyEmail}}",
+    "subjectIds": []
+  }
+}
+
+script:pre-request {
+  // Unique email each run, so the unique-email check doesn't return 409.
+  bru.setVar("facultyEmail", `priya.sharma.${Date.now()}@kronos.test`);
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setVar("facultyId", res.body.id);
+  }
+}
+
+tests {
+  test("returns 201 with an id", function () {
+    expect(res.status).to.equal(201);
+    expect(res.body.id).to.be.a("number");
+  });
+}
+
+docs {
+  `subjectIds` stays empty until subject CRUD is back on main; unknown ids are rejected.
+}

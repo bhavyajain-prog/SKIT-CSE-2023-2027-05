@@ -1,0 +1,18 @@
+meta {
+  name: Get faculty
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/faculty/{{facultyId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("returns the created faculty", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.id).to.equal(Number(bru.getVar("facultyId")));
+  });
+}
