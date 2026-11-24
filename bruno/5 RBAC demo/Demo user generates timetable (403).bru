@@ -1,0 +1,29 @@
+meta {
+  name: Demo user generates timetable (403)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/timetables/generate
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{demoAccessToken}}
+}
+
+body:json {
+  {
+    "name": "Not allowed",
+    "weekDays": 5,
+    "maxSlots": 8
+  }
+}
+
+tests {
+  test("a user without TIMETABLE_GENERATE gets 403", function () {
+    expect(res.status).to.equal(403);
+  });
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Get timetable - missing (404)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/timetables/999999999
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("unknown id returns 404", function () {
+    expect(res.status).to.equal(404);
+  });
+}

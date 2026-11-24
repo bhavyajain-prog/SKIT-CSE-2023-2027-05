@@ -27,4 +27,8 @@ public class ScheduledSessionEntity extends BaseEntity {
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private RoomEntity room;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "timetable_id")
+    private TimetableEntity timetable;
 }

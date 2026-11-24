@@ -1,0 +1,24 @@
+meta {
+  name: Create faculty - invalid (400)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/faculty
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "",
+    "email": "not-an-email"
+  }
+}
+
+tests {
+  test("validation errors return 400", function () {
+    expect(res.status).to.equal(400);
+  });
+}

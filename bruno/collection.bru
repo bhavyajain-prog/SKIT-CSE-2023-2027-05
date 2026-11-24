@@ -1,0 +1,21 @@
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+vars:pre-request {
+  baseUrl: https://api-kronos.nerfex.dev
+}
+
+vars:post-response {
+  accessToken: accessToken
+}
+
+docs {
+  Requests inherit `Authorization: Bearer {{accessToken}}` from here.
+  Run **2 Auth / Login** first: it stores `accessToken` and `refreshToken`
+  as runtime variables, so every other request is authenticated.
+}

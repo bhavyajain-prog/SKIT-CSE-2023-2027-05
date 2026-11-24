@@ -58,7 +58,7 @@ Status: ✅ done · 🔄 in progress · ⏳ planned
 | Dedicated service layer separated from engine | 2026-09-14 | 2026-10-18 | ✅ |
 | JUnit testing | 2026-10-19 | 2026-11-08 | 🔄 |
 | Docker based build and deployment setup | 2026-11-09 | 2026-11-22 | ⏳ |
-| Engine integration with timetable service | 2026-11-23 | 2026-12-27 | ⏳ |
+| Engine integration with timetable service | 2026-11-23 | 2026-12-27 | 🔄 |
 | Performance and load testing | 2026-12-28 | 2027-01-31 | ⏳ |
 | Production deployment and monitoring | 2027-02-01 | 2027-02-28 | ⏳ |
 | Final hardening, documentation and demo | 2027-03-01 | 2027-03-31 | ⏳ |

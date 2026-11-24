@@ -1,0 +1,28 @@
+meta {
+  name: Assign roles
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/admin/users/{{userId}}/roles
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "roles": ["FACULTY", "STUDENT"]
+  }
+}
+
+tests {
+  test("roles replaced", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.roles).to.include.members(["FACULTY", "STUDENT"]);
+  });
+}
+
+docs {
+  Replaces the user's roles. Nobody can change their own roles.
+}

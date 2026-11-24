@@ -1,0 +1,10 @@
+meta {
+  name: 6 Timetables
+}
+
+docs {
+  Synchronous timetable generation over all stored teachers, batches and rooms.
+  Generate and delete need `TIMETABLE_GENERATE` (HOD and above); reads need
+  `TIMETABLE_READ`. Generation returns 400 until the database has at least one
+  batch, one room, and a teacher for every batch subject.
+}

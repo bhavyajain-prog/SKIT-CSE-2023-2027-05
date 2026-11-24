@@ -1,0 +1,17 @@
+meta {
+  name: No token (401)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/faculty
+  body: none
+  auth: none
+}
+
+tests {
+  test("protected endpoint without a token returns 401", function () {
+    expect(res.status).to.equal(401);
+  });
+}

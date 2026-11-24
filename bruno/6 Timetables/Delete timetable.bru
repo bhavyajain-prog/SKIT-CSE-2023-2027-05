@@ -1,0 +1,17 @@
+meta {
+  name: Delete timetable
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/api/timetables/{{timetableId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("returns 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}

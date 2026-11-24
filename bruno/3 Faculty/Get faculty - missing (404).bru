@@ -1,0 +1,17 @@
+meta {
+  name: Get faculty - missing (404)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/faculty/999999999
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("unknown id returns 404", function () {
+    expect(res.status).to.equal(404);
+  });
+}

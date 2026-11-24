@@ -1,0 +1,21 @@
+meta {
+  name: Demo user reads faculty (200)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/faculty
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{demoAccessToken}}
+}
+
+tests {
+  test("FACULTY role has FACULTY_READ", function () {
+    expect(res.status).to.equal(200);
+  });
+}

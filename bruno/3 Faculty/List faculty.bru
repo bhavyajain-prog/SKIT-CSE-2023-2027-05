@@ -1,0 +1,18 @@
+meta {
+  name: List faculty
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/faculty
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("returns a list", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an("array");
+  });
+}
