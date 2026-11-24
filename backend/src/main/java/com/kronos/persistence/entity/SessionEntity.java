@@ -30,6 +30,12 @@ public class SessionEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "preferred_room_id")
     private RoomEntity preferredRoom;
-}
 
-// TODO: Link this with the job_id for handling multiple requests at once
+    // Number of consecutive slots this session takes.
+    @Column(nullable = false)
+    private int slotDuration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "timetable_id")
+    private TimetableEntity timetable;
+}
